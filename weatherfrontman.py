@@ -1,13 +1,10 @@
 import requests, json, random
 
-print("")
 print("I can tell you what the cool weatherman are listening to anywhere in the world.")
-print("")
 
 # Start off by asking for input
 city = input("What city are you looking for? ")
 state = input("And the two-letter code, like for state or province? ")
-print("")
 
 # First, ready these input items for searching Yahoo's weather API
 combined = 'select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="' + city + ', ' + state + '")'
@@ -45,4 +42,3 @@ sentence2 = "(Because it's " + weather_condition + " there, obviously.)"
 
 print(sentence)
 print(sentence2)
-print("")
