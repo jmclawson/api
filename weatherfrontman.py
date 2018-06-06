@@ -4,9 +4,9 @@ print("")
 print("I can tell you what the cool weatherman are listening to anywhere in the world.")
 print("")
 
+# Start off by asking for input
 city = input("What city are you looking for? ")
 state = input("And the two-letter code, like for state or province? ")
-
 print("")
 
 # First, ready these input items for searching Yahoo's weather API
@@ -23,8 +23,9 @@ weather = requests.get("https://query.yahooapis.com/v1/public/yql", params=param
 weather_parsed = json.loads(weather.text)
 weather_condition = weather_parsed['query']['results']['channel']['item']['condition']['text']
 
-# Now that's done, search Genius for the weather conditions found above. 
-# (The access_token is from the OAuth registered with the site.)
+# Now that that's done, search Genius for instances of the weather conditions found above 
+# The access_token is acquired by registering with the site: https://docs.genius.com
+# Enter the 64-character code in quotation marks below, in place of YOURTOKENHERE
 params2 = {'q' : weather_condition, 
            'access_token' : YOURTOKENHERE
           }
@@ -34,7 +35,7 @@ song_parsed = json.loads(song.text)
 # Get the list of songs
 song_postparsed = song_parsed['response']['hits']
 
-# Choose one of these songs at random and get its title
+# Choose one of these songs at random, and then get its title
 chosen_song = random.randint(0,(len(song_postparsed)-1))
 song_title = song_postparsed[chosen_song]['result']['full_title']
 
