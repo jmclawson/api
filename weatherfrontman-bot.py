@@ -65,4 +65,6 @@ class MyStreamListener(tweepy.StreamListener):
 # Connect to the streaming API and print tweets matching our keywords
 myStreamListener = MyStreamListener()
 myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
+
+# Now define the string to listen for in Twitter
 print(myStream.filter(track=['@weatherfrontman']))
