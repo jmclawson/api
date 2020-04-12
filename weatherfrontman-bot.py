@@ -6,18 +6,17 @@ import json
 import random
 
 def getresponse(locale):
-    combined = 'select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="' + locale + '")'
+    combined = locale
 
     # Set them up as parameters for the query
     params = {'q' : combined,
-          'format' : 'json',
-          'env' : 'store%3A%2F%2Fdatatables.org%2Falltableswithkeys'
+          'appid' : my_keys.WEATHER
       }
 
     # Pass the GET request with the right parameters, then parse the results
-    weather = requests.get("https://query.yahooapis.com/v1/public/yql", params=params)
+    weather = requests.get("https://api.openweathermap.org/data/2.5/weather", params=params)
     weather_parsed = json.loads(weather.text)
-    weather_condition = weather_parsed['query']['results']['channel']['item']['condition']['text']
+    weather_condition = weather_parsed['weather'][0]['main']
 
     # Now that's done, search Genius for the weather conditions found above. (The access_token is from the OAuth registered with the site.)
     params2 = {'q' : weather_condition,
@@ -58,7 +57,7 @@ class MyStreamListener(tweepy.StreamListener):
         # The .split method divides the string at the first space and returns everything after it
         weathertweet = getresponse(tweet.split(' ', 1)[1])
         
-        if not ('RT @' in tweet) :	
+        if not ('RT @' in tweet) :  
             print("\"%s\",\"%s\",\"%s\"" % (weathertweet,userid,tweetid))
             api.update_status(status="@" + userid + " " + weathertweet + " #dhsiapi #dhsi18", in_reply_to_status_id=status.id)
 
