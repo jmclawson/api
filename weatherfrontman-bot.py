@@ -17,6 +17,14 @@ def getresponse(locale):
     weather = requests.get("https://api.openweathermap.org/data/2.5/weather", params=params)
     weather_parsed = json.loads(weather.text)
     weather_condition = weather_parsed['weather'][0]['main']
+    weather_description = weather_parsed['weather'][0]['description']
+    weather_icon = weather_parsed['weather'][0]['icon']
+    
+    weather_dictionary = {"01d":"u'\U00001F31E'", 
+                         "01n":"u'\U00001F31D'", 
+                         "04dn":"u'\U00002601'"}
+    for key in weather_dictionary.keys():
+        weather_icon = weather_icon.replace(key, weather_dictionary[key])
 
     # Now that's done, search Genius for the weather conditions found above. (The access_token is from the OAuth registered with the site.)
     params2 = {'q' : weather_condition,
@@ -34,7 +42,7 @@ def getresponse(locale):
 
     # Return the results, both unhelpful and helpful
     # The .split method divides the string at the comma and returns everything before it
-    sentence = "They're playing " + song_title + " over in " + locale.split(', ', 1)[0] + "! (Because it's " + weather_condition + " there, obviously.)"
+    sentence = "They're playing " + song_title + " over in " + locale.split(', ', 1)[0] + "! (Because they've got " + weather_description + " there, obviously.) " + weather_icon
     return sentence
 
 # Get the authentication keys from my_keys.py
